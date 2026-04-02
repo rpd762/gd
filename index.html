@@ -31,32 +31,37 @@
   .nav button {
     background: none; border: none; color: var(--fg);
     font-family: inherit; font-size: 13px; opacity: 0.55;
-    cursor: pointer; padding: 4px 2px; -webkit-tap-highlight-color: transparent;
+    cursor: pointer; padding: 8px 4px; -webkit-tap-highlight-color: transparent;
+    min-width: 32px; min-height: 32px;
   }
   .nav button:hover { opacity: 1; }
-  .dots { display: flex; gap: 8px; align-items: center; margin-left: 4px; }
-  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--fg); opacity: 0.25; cursor: pointer; transition: opacity 0.3s; }
+  .dots { display: flex; gap: 10px; align-items: center; margin-left: 4px; flex-wrap: wrap; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--fg); opacity: 0.25; cursor: pointer; transition: opacity 0.3s; }
   .dot.on { opacity: 1; }
-
   .teams { display: flex; flex-direction: column; gap: 18px; }
   .team { display: flex; flex-direction: column; gap: 6px; }
   .team-name { font-weight: 400; letter-spacing: 0.05em; }
-  .team-links { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .team-links { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
   .icon-link {
     display: inline-flex; align-items: center; justify-content: center;
     opacity: 0.55; transition: opacity 0.2s; color: var(--fg);
-    text-decoration: none; -webkit-tap-highlight-color: transparent;
-    flex-shrink: 0;
+    text-decoration: none; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+    padding: 4px;
   }
-  .icon-link:hover { opacity: 1; }
-  .icon-link svg { width: 18px; height: 18px; display: block; }
-
+  .icon-link:hover, .icon-link:active { opacity: 1; }
+  .icon-link svg { width: 20px; height: 20px; display: block; }
   footer { margin-top: 56px; font-size: 12px; opacity: 0.5; }
-  @media (max-width: 480px) { body { font-size: 13px; padding: 44px 18px 64px; } }
+  .cat-section { margin-top: 920px; padding-bottom: 20px; }
+  .cat-img { width: 100%; display: block; opacity: 0; transition: opacity 0.6s ease; }
+  .cat-img.loaded { opacity: 1; }
+  @media (max-width: 480px) {
+    body { font-size: 13px; padding: 44px 18px 64px; }
+    .icon-link svg { width: 22px; height: 22px; }
+    .dot { width: 7px; height: 7px; }
+  }
 </style>
 </head>
 <body>
-
 <canvas id="bg"></canvas>
 
 <p>i do geometry dash effect layouts, heres some info u need if u wanna work w me</p>
@@ -71,7 +76,6 @@
 
 <div class="section-label">teams that i am in</div>
 <div class="teams">
-
   <div class="team">
     <div class="team-name">ZEPHYR</div>
     <div class="team-links">
@@ -80,7 +84,6 @@
       </a>
     </div>
   </div>
-
   <div class="team">
     <div class="team-name">GLACIËR</div>
     <div class="team-links">
@@ -92,7 +95,6 @@
       </a>
     </div>
   </div>
-
   <div class="team">
     <div class="team-name">XERVIA <span style="font-weight:300;opacity:0.55;font-size:12px;">owner</span></div>
     <div class="team-links">
@@ -101,7 +103,6 @@
       </a>
     </div>
   </div>
-
 </div>
 
 <hr>
@@ -118,13 +119,71 @@
 
 <footer>if interrested, dm 'rpd7' on discord</footer>
 
+<div class="cat-section">
+  <img id="cat" class="cat-img" alt="" />
+</div>
+
 <script>
+function h(hex) {
+  return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+}
+
 const themes = [
-  { colors: [[26,5,0],[61,12,0],[42,8,0],[26,5,0]], fg: '#ffcfb8', line: 'rgba(255,200,150,0.2)' },
-  { colors: [[13,13,13],[34,0,64],[24,0,48],[13,13,13]], fg: '#ddb8ff', line: 'rgba(180,100,255,0.2)' },
-  { colors: [[13,59,94],[8,42,69],[14,74,114],[13,59,94]], fg: '#d0ecf8', line: 'rgba(200,235,255,0.2)' },
-  { colors: [[8,8,8],[34,0,21],[26,0,15],[8,8,8]], fg: '#ffb3d1', line: 'rgba(255,0,110,0.2)' },
-  { colors: [[242,230,238],[232,216,245],[237,224,247],[242,230,238]], fg: '#4a2d7a', line: 'rgba(151,125,223,0.3)' },
+  { c: ['#1A0500','#3d0c00','#2a0600','#1A0500'], fg: '#ffcfb8', line: 'rgba(255,200,150,0.2)' },
+  { c: ['#0D0D0D','#220040','#180030','#0D0D0D'], fg: '#ddb8ff', line: 'rgba(180,100,255,0.2)' },
+  { c: ['#0D3B5E','#082a45','#0e4a72','#0D3B5E'], fg: '#d0ecf8', line: 'rgba(200,235,255,0.2)' },
+  { c: ['#080808','#220015','#1a000f','#080808'], fg: '#ffb3d1', line: 'rgba(255,0,110,0.2)' },
+  { c: ['#F2E6EE','#e8d8f5','#ede0f7','#F2E6EE'], fg: '#4a2d7a', line: 'rgba(151,125,223,0.3)' },
+  { c: ['#0b1020','#1a0a2e','#12082a','#0b1020'], fg: '#f72585', line: 'rgba(247,37,133,0.2)' },
+  { c: ['#0d0221','#1a053a','#0a1628','#0d0221'], fg: '#4cc9f0', line: 'rgba(76,201,240,0.2)' },
+  { c: ['#120b1e','#3a0a2a','#200818','#120b1e'], fg: '#ff4d8d', line: 'rgba(255,77,141,0.2)' },
+  { c: ['#0a1a1a','#0d2e2e','#061414','#0a1a1a'], fg: '#2ce8c8', line: 'rgba(44,232,200,0.2)' },
+  { c: ['#0b1a0e','#0d3a20','#071510','#0b1a0e'], fg: '#c9a368', line: 'rgba(201,163,104,0.2)' },
+  { c: ['#0e0814','#1c0a2e','#150620','#0e0814'], fg: '#d4b8f0', line: 'rgba(180,140,220,0.2)' },
+  { c: ['#0D3A32','#192a3c','#224942','#0D3A32'], fg: '#a8ddd8', line: 'rgba(168,221,216,0.2)' },
+  { c: ['#1a0f0f','#2e1515','#1e0c0c','#1a0f0f'], fg: '#e8b4b8', line: 'rgba(232,180,184,0.2)' },
+  { c: ['#0e1118','#151d28','#0a0f18','#0e1118'], fg: '#c8d8e8', line: 'rgba(200,216,232,0.2)' },
+  { c: ['#0C0402','#3B2214','#1a0e08','#0C0402'], fg: '#d4a574', line: 'rgba(212,165,116,0.2)' },
+  { c: ['#0b1320','#0f1a10','#081020','#0b1320'], fg: '#a3ff12', line: 'rgba(163,255,18,0.2)' },
+  { c: ['#352a55','#3e3264','#28204a','#352a55'], fg: '#fe546f', line: 'rgba(254,84,111,0.2)' },
+  { c: ['#0a1a20','#0e2830','#061518','#0a1a20'], fg: '#00ffb3', line: 'rgba(0,255,179,0.2)' },
+  { c: ['#1a1038','#2a1858','#120c28','#1a1038'], fg: '#ffe66d', line: 'rgba(255,230,109,0.2)' },
+  { c: ['#1c1208','#2e1e0a','#141008','#1c1208'], fg: '#f4d47c', line: 'rgba(244,212,124,0.2)' },
+  { c: ['#1a0010','#35002a','#25001c','#1a0010'], fg: '#ff9eb5', line: 'rgba(255,158,181,0.2)' },
+  { c: ['#0d1225','#1a2040','#0a0e1e','#0d1225'], fg: '#7eb8d4', line: 'rgba(126,184,212,0.2)' },
+  { c: ['#140800','#2a1200','#1e0c00','#140800'], fg: '#ff6b35', line: 'rgba(255,107,53,0.2)' },
+  { c: ['#272744','#1e1e38','#1a1a30','#272744'], fg: '#c69fa5', line: 'rgba(198,159,165,0.2)' },
+  { c: ['#050f08','#0a1e10','#030a05','#050f08'], fg: '#39ff14', line: 'rgba(57,255,20,0.2)' },
+  { c: ['#020d18','#041e38','#010a12','#020d18'], fg: '#00d4ff', line: 'rgba(0,212,255,0.2)' },
+  { c: ['#f5ead8','#ede0c8','#f0e5d0','#f5ead8'], fg: '#3b1f0a', line: 'rgba(59,31,10,0.15)' },
+  { c: ['#e8f0e8','#dce8dc','#e0eae0','#e8f0e8'], fg: '#1a3320', line: 'rgba(26,51,32,0.15)' },
+  { c: ['#0a0800','#1a1400','#100e00','#0a0800'], fg: '#ffd700', line: 'rgba(255,215,0,0.2)' },
+  { c: ['#1a0008','#2e0010','#12000a','#1a0008'], fg: '#ff6b6b', line: 'rgba(255,107,107,0.2)' },
+  { c: ['#e8f4f8','#d8ecf4','#e0f0f5','#e8f4f8'], fg: '#0d2a3e', line: 'rgba(13,42,62,0.15)' },
+  { c: ['#080e06','#101a0a','#060c04','#080e06'], fg: '#e8e4a0', line: 'rgba(232,228,160,0.2)' },
+  { c: ['#0a0015','#180028','#080010','#0a0015'], fg: '#bf5fff', line: 'rgba(191,95,255,0.2)' },
+  { c: ['#141010','#221818','#0e0c0c','#141010'], fg: '#ff7f5c', line: 'rgba(255,127,92,0.2)' },
+  { c: ['#0c1018','#141c28','#080e14','#0c1018'], fg: '#a8c8e8', line: 'rgba(168,200,232,0.2)' },
+  { c: ['#0a0a14','#14102a','#0e0c20','#0a0a14'], fg: '#c8b8ff', line: 'rgba(200,184,255,0.2)' },
+  { c: ['#001a0a','#003018','#001210','#001a0a'], fg: '#80ffcc', line: 'rgba(128,255,204,0.2)' },
+  { c: ['#1a1400','#302800','#201c00','#1a1400'], fg: '#ffa040', line: 'rgba(255,160,64,0.2)' },
+  { c: ['#10001a','#200030','#180028','#10001a'], fg: '#ff80ff', line: 'rgba(255,128,255,0.2)' },
+  { c: ['#001020','#002040','#001830','#001020'], fg: '#60c8ff', line: 'rgba(96,200,255,0.2)' },
+  { c: ['#0e0e0e','#1c1c1c','#141414','#0e0e0e'], fg: '#e8e8e8', line: 'rgba(232,232,232,0.15)' },
+  { c: ['#1a000a','#300010','#200008','#1a000a'], fg: '#ff5588', line: 'rgba(255,85,136,0.2)' },
+  { c: ['#001818','#003030','#001e20','#001818'], fg: '#40e0d0', line: 'rgba(64,224,208,0.2)' },
+  { c: ['#0c0800','#201600','#180e00','#0c0800'], fg: '#ffcc44', line: 'rgba(255,204,68,0.2)' },
+  { c: ['#100a10','#201820','#180e18','#100a10'], fg: '#e880c8', line: 'rgba(232,128,200,0.2)' },
+  { c: ['#000a18','#001230','#000e20','#000a18'], fg: '#88aaff', line: 'rgba(136,170,255,0.2)' },
+  { c: ['#0a1400','#142400','#0e1c00','#0a1400'], fg: '#aaff44', line: 'rgba(170,255,68,0.2)' },
+  { c: ['#18080a','#301018','#200c10','#18080a'], fg: '#ff8888', line: 'rgba(255,136,136,0.2)' },
+  { c: ['#080818','#101030','#0c0c20','#080818'], fg: '#8888ff', line: 'rgba(136,136,255,0.2)' },
+  { c: ['#001400','#002800','#001e00','#001400'], fg: '#66ff88', line: 'rgba(102,255,136,0.2)' },
+  { c: ['#f0e8d8','#e8dcc8','#ece4d0','#f0e8d8'], fg: '#5a3a1a', line: 'rgba(90,58,26,0.15)' },
+  { c: ['#18000a','#340014','#28000e','#18000a'], fg: '#ff44aa', line: 'rgba(255,68,170,0.2)' },
+  { c: ['#001010','#002020','#001818','#001010'], fg: '#44ffee', line: 'rgba(68,255,238,0.2)' },
+  { c: ['#0a0a00','#1c1c00','#141400','#0a0a00'], fg: '#ddff44', line: 'rgba(221,255,68,0.2)' },
+  { c: ['#100014','#200028','#18001e','#100014'], fg: '#cc88ff', line: 'rgba(204,136,255,0.2)' },
 ];
 
 const t = themes[Math.floor(Math.random() * themes.length)];
@@ -138,40 +197,40 @@ function resize() { canvas.width = window.innerWidth; canvas.height = window.inn
 window.addEventListener('resize', resize);
 resize();
 
-const blobs = t.colors.map((c, i) => {
-  const angle = (i / t.colors.length) * Math.PI * 2;
+const blobs = t.c.map((hex, i) => {
+  const angle = (i / t.c.length) * Math.PI * 2;
   return {
-    x: 0.5 + Math.cos(angle) * 0.35,
-    y: 0.5 + Math.sin(angle) * 0.35,
-    vx: (Math.random() - 0.5) * 0.0005,
-    vy: (Math.random() - 0.5) * 0.0005,
-    color: c,
+    x: 0.5 + Math.cos(angle) * 0.38,
+    y: 0.5 + Math.sin(angle) * 0.38,
+    vx: (Math.random() - 0.5) * 0.0008,
+    vy: (Math.random() - 0.5) * 0.0008,
+    color: h(hex),
   };
 });
 
 const offscreen = document.createElement('canvas');
 const octx = offscreen.getContext('2d');
-let W, H, scale = 6;
+const SCALE = 6;
 
-function ensureOffscreen() {
-  W = canvas.width; H = canvas.height;
-  offscreen.width = Math.ceil(W / scale);
-  offscreen.height = Math.ceil(H / scale);
+function ensureOff() {
+  offscreen.width = Math.max(1, Math.ceil(canvas.width / SCALE));
+  offscreen.height = Math.max(1, Math.ceil(canvas.height / SCALE));
 }
-ensureOffscreen();
-window.addEventListener('resize', ensureOffscreen);
+ensureOff();
+window.addEventListener('resize', () => { resize(); ensureOff(); });
 
-function draw() {
+let lastFrame = 0;
+function draw(ts) {
+  if (ts - lastFrame < 33) { requestAnimationFrame(draw); return; }
+  lastFrame = ts;
   const ow = offscreen.width, oh = offscreen.height;
-  const imageData = octx.createImageData(ow, oh);
-  const data = imageData.data;
-
+  const id = octx.createImageData(ow, oh);
+  const d = id.data;
   for (const b of blobs) {
     b.x += b.vx; b.y += b.vy;
     if (b.x < 0.05 || b.x > 0.95) b.vx *= -1;
     if (b.y < 0.05 || b.y > 0.95) b.vy *= -1;
   }
-
   for (let py = 0; py < oh; py++) {
     for (let px = 0; px < ow; px++) {
       const nx = px / ow, ny = py / oh;
@@ -179,17 +238,13 @@ function draw() {
       for (const b of blobs) {
         const dx = nx - b.x, dy = ny - b.y;
         const w = 1 / (0.001 + (dx*dx + dy*dy) * 3.5);
-        r += b.color[0] * w;
-        g += b.color[1] * w;
-        b2 += b.color[2] * w;
-        tw += w;
+        r += b.color[0] * w; g += b.color[1] * w; b2 += b.color[2] * w; tw += w;
       }
-      const idx = (py * ow + px) * 4;
-      data[idx] = r/tw; data[idx+1] = g/tw; data[idx+2] = b2/tw; data[idx+3] = 255;
+      const i = (py * ow + px) * 4;
+      d[i] = r/tw; d[i+1] = g/tw; d[i+2] = b2/tw; d[i+3] = 255;
     }
   }
-
-  octx.putImageData(imageData, 0, 0);
+  octx.putImageData(id, 0, 0);
   ctx.save();
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
@@ -197,8 +252,7 @@ function draw() {
   ctx.restore();
   requestAnimationFrame(draw);
 }
-
-draw();
+requestAnimationFrame(draw);
 
 const videos = [
   'https://cdn.discordapp.com/attachments/1477465210674741328/1477472219310588015/lv_0_20260301020615.mp4?ex=69cfbb7b&is=69ce69fb&hm=3175a3a4db5b6028b96b57e6ca4bcd4eb527d1d716e36ab3f086c029503c91e3&',
@@ -211,24 +265,24 @@ const videos = [
 let cur = Math.floor(Math.random() * videos.length);
 const vid = document.getElementById('vid');
 const dotsEl = document.getElementById('dots');
-
 videos.forEach((_, i) => {
   const d = document.createElement('div');
   d.className = 'dot';
   d.onclick = () => { cur = i; render(); };
   dotsEl.appendChild(d);
 });
-
 function render() {
-  vid.src = videos[cur];
-  vid.load();
+  vid.src = videos[cur]; vid.load();
   dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
 }
-
 document.getElementById('prev').onclick = () => { cur = (cur - 1 + videos.length) % videos.length; render(); };
 document.getElementById('next').onclick = () => { cur = (cur + 1) % videos.length; render(); };
-
 render();
+
+const catEl = document.getElementById('cat');
+catEl.src = Math.random() < 0.5 ? 'https://cataas.com/cat' : 'https://cataas.com/cat/gif';
+catEl.onload = () => catEl.classList.add('loaded');
+catEl.onerror = () => catEl.style.display = 'none';
 </script>
 </body>
 </html>
