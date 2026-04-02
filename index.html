@@ -1,3 +1,234 @@
-<p>
-lol
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    min-height: 100vh;
+    color: var(--fg);
+    padding: 60px 24px 80px;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+  canvas#bg { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: -1; }
+  p { margin-bottom: 1em; }
+  ul { list-style: none; margin: 0 0 1em 0; }
+  ul li::before { content: '* '; }
+  .note { margin-top: 1.4em; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 40px 0; }
+  .section-label { font-size: 12px; opacity: 0.6; margin-bottom: 14px; }
+  .video-wrap { width: 100%; aspect-ratio: 16/9; background: var(--line); overflow: hidden; }
+  .video-wrap video { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .nav { margin-top: 12px; display: flex; gap: 8px; align-items: center; }
+  .nav button {
+    background: none; border: none; color: var(--fg);
+    font-family: inherit; font-size: 13px; opacity: 0.55;
+    cursor: pointer; padding: 4px 2px; -webkit-tap-highlight-color: transparent;
+  }
+  .nav button:hover { opacity: 1; }
+  .dots { display: flex; gap: 8px; align-items: center; margin-left: 4px; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--fg); opacity: 0.25; cursor: pointer; transition: opacity 0.3s; }
+  .dot.on { opacity: 1; }
+
+  .teams { display: flex; flex-direction: column; gap: 18px; }
+  .team { display: flex; flex-direction: column; gap: 6px; }
+  .team-name { font-weight: 400; letter-spacing: 0.05em; }
+  .team-links { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .icon-link {
+    display: inline-flex; align-items: center; justify-content: center;
+    opacity: 0.55; transition: opacity 0.2s; color: var(--fg);
+    text-decoration: none; -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  .icon-link:hover { opacity: 1; }
+  .icon-link svg { width: 18px; height: 18px; display: block; }
+
+  footer { margin-top: 56px; font-size: 12px; opacity: 0.5; }
+  @media (max-width: 480px) { body { font-size: 13px; padding: 44px 18px 64px; } }
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<p>i do geometry dash effect layouts, heres some info u need if u wanna work w me</p>
+<p>i do stuff free of charge with some cavats</p>
+<ul>
+  <li>parts should not be longer than 10-14 seconds</li>
+  <li>i must like the song</li>
+</ul>
+<p class="note">i wont make effects for you except if i like the song, or if u are a friend</p>
+
+<hr>
+
+<div class="section-label">teams that i am in</div>
+<div class="teams">
+
+  <div class="team">
+    <div class="team-name">ZEPHYR</div>
+    <div class="team-links">
+      <a class="icon-link" href="https://www.tiktok.com/@team_zephyr?_r=1&_t=ZG-95D83HNBZBo" target="_blank" title="TikTok">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="team">
+    <div class="team-name">GLACIËR</div>
+    <div class="team-links">
+      <a class="icon-link" href="https://www.youtube.com/@GLACIER_GD" target="_blank" title="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.54 3.5 12 3.5 12 3.5s-7.54 0-9.38.55A3.02 3.02 0 0 0 .5 6.19C0 8.04 0 12 0 12s0 3.96.5 5.81a3.02 3.02 0 0 0 2.12 2.14C4.46 20.5 12 20.5 12 20.5s7.54 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14C24 15.96 24 12 24 12s0-3.96-.5-5.81zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"/></svg>
+      </a>
+      <a class="icon-link" href="https://discord.com/invite/3f9HFMgZAK" target="_blank" title="Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.053a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="team">
+    <div class="team-name">XERVIA <span style="font-weight:300;opacity:0.55;font-size:12px;">owner</span></div>
+    <div class="team-links">
+      <a class="icon-link" href="https://discord.com/invite/e22zTuRSPW" target="_blank" title="Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.053a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<hr>
+
+<div class="section-label">example</div>
+<div class="video-wrap">
+  <video id="vid" controls playsinline></video>
+</div>
+<div class="nav">
+  <button id="prev">←</button>
+  <button id="next">→</button>
+  <div class="dots" id="dots"></div>
+</div>
+
+<footer>if interrested, dm 'rpd7' on discord</footer>
+
+<script>
+const themes = [
+  { colors: [[26,5,0],[61,12,0],[42,8,0],[26,5,0]], fg: '#ffcfb8', line: 'rgba(255,200,150,0.2)' },
+  { colors: [[13,13,13],[34,0,64],[24,0,48],[13,13,13]], fg: '#ddb8ff', line: 'rgba(180,100,255,0.2)' },
+  { colors: [[13,59,94],[8,42,69],[14,74,114],[13,59,94]], fg: '#d0ecf8', line: 'rgba(200,235,255,0.2)' },
+  { colors: [[8,8,8],[34,0,21],[26,0,15],[8,8,8]], fg: '#ffb3d1', line: 'rgba(255,0,110,0.2)' },
+  { colors: [[242,230,238],[232,216,245],[237,224,247],[242,230,238]], fg: '#4a2d7a', line: 'rgba(151,125,223,0.3)' },
+];
+
+const t = themes[Math.floor(Math.random() * themes.length)];
+document.documentElement.style.setProperty('--fg', t.fg);
+document.documentElement.style.setProperty('--line', t.line);
+
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize);
+resize();
+
+const blobs = t.colors.map((c, i) => {
+  const angle = (i / t.colors.length) * Math.PI * 2;
+  return {
+    x: 0.5 + Math.cos(angle) * 0.35,
+    y: 0.5 + Math.sin(angle) * 0.35,
+    vx: (Math.random() - 0.5) * 0.0005,
+    vy: (Math.random() - 0.5) * 0.0005,
+    color: c,
+  };
+});
+
+const offscreen = document.createElement('canvas');
+const octx = offscreen.getContext('2d');
+let W, H, scale = 6;
+
+function ensureOffscreen() {
+  W = canvas.width; H = canvas.height;
+  offscreen.width = Math.ceil(W / scale);
+  offscreen.height = Math.ceil(H / scale);
+}
+ensureOffscreen();
+window.addEventListener('resize', ensureOffscreen);
+
+function draw() {
+  const ow = offscreen.width, oh = offscreen.height;
+  const imageData = octx.createImageData(ow, oh);
+  const data = imageData.data;
+
+  for (const b of blobs) {
+    b.x += b.vx; b.y += b.vy;
+    if (b.x < 0.05 || b.x > 0.95) b.vx *= -1;
+    if (b.y < 0.05 || b.y > 0.95) b.vy *= -1;
+  }
+
+  for (let py = 0; py < oh; py++) {
+    for (let px = 0; px < ow; px++) {
+      const nx = px / ow, ny = py / oh;
+      let r = 0, g = 0, b2 = 0, tw = 0;
+      for (const b of blobs) {
+        const dx = nx - b.x, dy = ny - b.y;
+        const w = 1 / (0.001 + (dx*dx + dy*dy) * 3.5);
+        r += b.color[0] * w;
+        g += b.color[1] * w;
+        b2 += b.color[2] * w;
+        tw += w;
+      }
+      const idx = (py * ow + px) * 4;
+      data[idx] = r/tw; data[idx+1] = g/tw; data[idx+2] = b2/tw; data[idx+3] = 255;
+    }
+  }
+
+  octx.putImageData(imageData, 0, 0);
+  ctx.save();
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
+  ctx.restore();
+  requestAnimationFrame(draw);
+}
+
+draw();
+
+const videos = [
+  'https://cdn.discordapp.com/attachments/1477465210674741328/1477472219310588015/lv_0_20260301020615.mp4?ex=69cfbb7b&is=69ce69fb&hm=3175a3a4db5b6028b96b57e6ca4bcd4eb527d1d716e36ab3f086c029503c91e3&',
+  'https://cdn.discordapp.com/attachments/1477465210674741328/1477472175496626186/lv_0_20260301020412.mp4?ex=69cfbb70&is=69ce69f0&hm=2b36b453a839ac03c426bb8922f6a424e1b1d0e4f15fb95bb8e4c6c757141213&',
+  'https://cdn.discordapp.com/attachments/1477465210674741328/1477465352605798471/lv_0_20260214031331.mp4?ex=69cfb516&is=69ce6396&hm=18c7a588ef620d538b001f720c2dcde525122ae0236d9fc8ff15606758d79527&',
+  'https://cdn.discordapp.com/attachments/1477465210674741328/1489342820098768906/lv_0_20260330064643.mp4?ex=69d01216&is=69cec096&hm=361357ae41093d647595901f3e2a63fd20d488dba527f626b8b60e3f5f63c467&',
+  'https://cdn.discordapp.com/attachments/1477465210674741328/1477465246489776128/lv_0_20260301013509.mp4?ex=69cfb4fc&is=69ce637c&hm=535915d0e659630de8ff9ad6e00012c37dd88fd71df57dedb4e43b7ac4370bad&',
+];
+
+let cur = Math.floor(Math.random() * videos.length);
+const vid = document.getElementById('vid');
+const dotsEl = document.getElementById('dots');
+
+videos.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot';
+  d.onclick = () => { cur = i; render(); };
+  dotsEl.appendChild(d);
+});
+
+function render() {
+  vid.src = videos[cur];
+  vid.load();
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+}
+
+document.getElementById('prev').onclick = () => { cur = (cur - 1 + videos.length) % videos.length; render(); };
+document.getElementById('next').onclick = () => { cur = (cur + 1) % videos.length; render(); };
+
+render();
+</script>
+</body>
+</html>
