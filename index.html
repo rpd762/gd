@@ -65,7 +65,7 @@
 <canvas id="bg"></canvas>
 
 <p>i do geometry dash effect layouts, heres some info u need if u wanna work w me</p>
-<p>i do stuff free of charge with some caveats</p>
+<p>i do stuff free of charge with some cavats</p>
 <ul>
   <li>parts should not be longer than 10-14 seconds</li>
   <li>i must like the song</li>
@@ -193,18 +193,26 @@ document.documentElement.style.setProperty('--line', t.line);
 const canvas = document.getElementById('bg');
 const ctx = canvas.getContext('2d');
 
-function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
 window.addEventListener('resize', resize);
 resize();
 
 const blobs = t.c.map((hex, i) => {
   const angle = (i / t.c.length) * Math.PI * 2;
   return {
+    baseX: 0.5 + Math.cos(angle) * 0.38,
+    baseY: 0.5 + Math.sin(angle) * 0.38,
     x: 0.5 + Math.cos(angle) * 0.38,
     y: 0.5 + Math.sin(angle) * 0.38,
-    vx: (Math.random() - 0.5) * 0.0008,
-    vy: (Math.random() - 0.5) * 0.0008,
+    vx: (Math.random() - 0.5) * 0.0006,
+    vy: (Math.random() - 0.5) * 0.0006,
     color: h(hex),
+    radius: 0.22 + Math.random() * 0.08,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.8 + Math.random() * 0.6
   };
 });
 
@@ -219,39 +227,68 @@ function ensureOff() {
 ensureOff();
 window.addEventListener('resize', () => { resize(); ensureOff(); });
 
-let lastFrame = 0;
+let time = 0;
+
 function draw(ts) {
-  if (ts - lastFrame < 33) { requestAnimationFrame(draw); return; }
-  lastFrame = ts;
+  time = ts * 0.0013;
+
   const ow = offscreen.width, oh = offscreen.height;
   const id = octx.createImageData(ow, oh);
   const d = id.data;
-  for (const b of blobs) {
-    b.x += b.vx; b.y += b.vy;
-    if (b.x < 0.05 || b.x > 0.95) b.vx *= -1;
-    if (b.y < 0.05 || b.y > 0.95) b.vy *= -1;
-  }
+
+  // Update blob positions with organic movement
+  blobs.forEach(b => {
+    b.phase += 0.008 * b.speed;
+
+    const noise = Math.sin(time * 1.3 + b.phase) * 0.018;
+    const orbit = Math.sin(time * 0.7 + b.phase * 2) * 0.025;
+
+    b.x = b.baseX + Math.cos(time * 0.4 + b.phase) * orbit + noise;
+    b.y = b.baseY + Math.sin(time * 0.35 + b.phase * 1.3) * orbit * 0.8 + noise * 0.6;
+
+    // Gentle bouncing
+    if (b.x < 0.08 || b.x > 0.92) b.vx *= -0.7;
+    if (b.y < 0.08 || b.y > 0.92) b.vy *= -0.7;
+  });
+
   for (let py = 0; py < oh; py++) {
     for (let px = 0; px < ow; px++) {
       const nx = px / ow, ny = py / oh;
       let r = 0, g = 0, b2 = 0, tw = 0;
+
       for (const b of blobs) {
-        const dx = nx - b.x, dy = ny - b.y;
-        const w = 1 / (0.001 + (dx*dx + dy*dy) * 3.5);
-        r += b.color[0] * w; g += b.color[1] * w; b2 += b.color[2] * w; tw += w;
+        const dx = nx - b.x;
+        const dy = ny - b.y;
+        const distSq = dx*dx + dy*dy;
+
+        // Pulsing radius
+        const pulse = b.radius * (0.92 + Math.sin(time * 2.2 + b.phase) * 0.08);
+        const w = 1 / (0.001 + distSq * 3.8 / (pulse * pulse));
+
+        r += b.color[0] * w;
+        g += b.color[1] * w;
+        b2 += b.color[2] * w;
+        tw += w;
       }
+
       const i = (py * ow + px) * 4;
-      d[i] = r/tw; d[i+1] = g/tw; d[i+2] = b2/tw; d[i+3] = 255;
+      d[i]   = Math.min(255, r/tw * 1.05);   // slight vibrance boost
+      d[i+1] = Math.min(255, g/tw * 1.05);
+      d[i+2] = Math.min(255, b2/tw * 1.05);
+      d[i+3] = 255;
     }
   }
+
   octx.putImageData(id, 0, 0);
   ctx.save();
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
   ctx.restore();
+
   requestAnimationFrame(draw);
 }
+
 requestAnimationFrame(draw);
 
 const videos = [
